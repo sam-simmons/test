@@ -1,0 +1,40 @@
+{
+    "builders": [{
+		"type": "amazon-ebs",
+        "region": "ap-southeast-2",
+        "instance_type": "m5.large",
+        "ami_name": "win2019-encrypted-{{isotime \"2006-01-02\"}}",
+        "subnet_filter": {
+            "filters": {
+                "tag:aws:cloudformation:logical-id": "subnetPubUntrust*"
+              },
+              "most_free": true,
+              "random": false
+        },
+        "user_data_file": "./scripts/SetUpWinRM.ps1",
+        "communicator": "winrm",
+        "winrm_username": "Administrator",
+        "winrm_use_ssl": true,
+        "winrm_insecure": true,
+        "winrm_timeout": "12h",
+        "source_ami_filter": {
+            "filters": {
+                "name": "Windows_Server-2019-English-Full-Base-*"
+            },
+            "owners": ["801119661308"],
+            "most_recent": true
+        },
+        "encrypt_boot": true,
+        "ami_regions": ["ap-southeast-2"],
+        "shutdown_behavior": "terminate"
+    }],
+    "provisioners": [
+        {
+            "type": "powershell",
+            "inline": [
+                "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\InitializeInstance.ps1 -Schedule",
+                "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\SysprepInstance.ps1 -NoShutdown"
+            ]
+        }
+    ]
+}
