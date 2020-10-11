@@ -1,5 +1,9 @@
 {
+    "variables": {
+		"profile": ""
+    },
     "builders": [{
+        "profile": "{{user `profile`}}",
 		"type": "amazon-ebs",
         "region": "ap-southeast-2",
         "instance_type": "m5.large",
@@ -11,7 +15,6 @@
               "most_free": true,
               "random": false
         },
-        "user_data_file": "./scripts/SetUpWinRM.ps1",
         "communicator": "winrm",
         "winrm_username": "Administrator",
         "winrm_use_ssl": true,
