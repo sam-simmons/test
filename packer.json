@@ -1,43 +1,42 @@
 {
     "variables": {
-		"profile": ""
+		  "profile": ""
     },
     "builders": [{
-        "profile": "{{user `profile`}}",
-		"type": "amazon-ebs",
-        "region": "ap-southeast-2",
-        "instance_type": "m5.large",
-        "ami_name": "win2019-encrypted-{{isotime \"2006-01-02\"}}",
-        "subnet_filter": {
-            "filters": {
-                "tag:aws:cloudformation:logical-id": "subnetPubUntrust*"
-              },
-              "most_free": true,
-              "random": false
+      "profile": "{{user `profile`}}",
+      "ami_name": "minecraft-amzn2-linux-{{isotime \"2006-01-02\" | clean_resource_name}}",
+      "ami_description": "minecraft",
+      "instance_type": "t3a.nano",
+      "region": "ap-southeast-2",
+      "type": "amazon-ebs",
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "architecture": "x86_64",
+          "name": "amzn2-ami-hvm-2.0.*-x86_64-gp2",
+          "block-device-mapping.volume-type": "gp2",
+          "root-device-type": "ebs"
         },
-        "communicator": "winrm",
-        "winrm_username": "Administrator",
-        "winrm_use_ssl": true,
-        "winrm_insecure": true,
-        "winrm_timeout": "12h",
-        "source_ami_filter": {
-            "filters": {
-                "name": "Windows_Server-2019-English-Full-Base-*"
-            },
-            "owners": ["801119661308"],
-            "most_recent": true
-        },
-        "encrypt_boot": true,
-        "ami_regions": ["ap-southeast-2"],
-        "shutdown_behavior": "terminate"
+        "owners": ["137112412989"],
+        "most_recent": true
+      },
+		"subnet_filter": {
+			"filters": {
+				"tag:aws:cloudformation:logical-id": "subnetPubUntrust*"
+			  },
+			  "most_free": true,
+			  "random": false
+		},
+      "ssh_username": "ec2-user"
     }],
     "provisioners": [
-        {
-            "type": "powershell",
-            "inline": [
-                "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\InitializeInstance.ps1 -Schedule",
-                "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\SysprepInstance.ps1 -NoShutdown"
-            ]
-        }
-    ]
-}
+    {
+      "type": "shell",
+      "inline": [
+        "echo 'Sleeping for 30 seconds to give enough time to initialize (otherwise, packages may fail to install).'",
+        "sleep 30",
+        "sudo yum update -y",
+        "sudo yum -y install java-1.8.0-openjdk"
+      ]
+    }]
+  }

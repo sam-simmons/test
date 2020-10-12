@@ -1,1 +1,1 @@
-﻿packer -var "profile=sam" build packer.json
+﻿packer build -var "profile=sam" packer.json
