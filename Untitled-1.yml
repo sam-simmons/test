@@ -28,7 +28,12 @@ Resources:
         IpProtocol: tcp
         FromPort: 24725
         ToPort: 24725
-        Description: Internal VPN SSH access                     
+        Description: Internal VPN SSH access
+      - CidrIp: 10.60.42.0/24
+        IpProtocol: tcp
+        FromPort: 24726
+        ToPort: 24726
+        Description: blah                         
 
 Outputs:
   SFTPSGId:
