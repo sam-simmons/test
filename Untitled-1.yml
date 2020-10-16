@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+
+  # allow Click IT and other users in on 1433
+  SFTPSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !ImportValue "vpc-id"
+      GroupName: SFTPAccess
+      GroupDescription: Enable access for users to the SFTP
+      SecurityGroupIngress:
+      - CidrIp: 10.64.14.0/24
+        IpProtocol: tcp
+        FromPort: 3389
+        ToPort: 3389
+        Description: RDP Click IT HO subnet
+      - CidrIp: 10.60.43.0/24
+        IpProtocol: tcp
+        FromPort: 3389
+        ToPort: 3389
+        Description: RDP Click IT HO subnet
+      - CidrIp: 0.0.0.0/0
+        IpProtocol: tcp
+        FromPort: 24725
+        ToPort: 24725
+        Description: Internal/External SSH access
+      - CidrIp: 10.60.43.0/24
+        IpProtocol: tcp
+        FromPort: 24725
+        ToPort: 24725
+        Description: Internal VPN SSH access                     
+
+Outputs:
+  SFTPSGId:
+    Description: The SG ID of the instance
+    Value: !Ref SFTPSG
+    Export:
+      Name: SFTP-SG-Id
