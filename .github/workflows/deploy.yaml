@@ -22,6 +22,8 @@ jobs:
   # This job will run on every code change to the master branch, but will only deploy
   # changes if the infrastructure CloudFormation template in the repository changes.
   cfn:
+    name: Deploy to Amplify Console
+    runs-on: ubuntu-latest 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
