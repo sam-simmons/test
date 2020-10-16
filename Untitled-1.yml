@@ -6,8 +6,6 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       VpcId: !ImportValue "vpc-id"
-      GroupName: SFTPAccess
-      GroupDescription: Enable access for users to the SFTP
       SecurityGroupIngress:
       - CidrIp: 10.64.14.0/24
         IpProtocol: tcp
