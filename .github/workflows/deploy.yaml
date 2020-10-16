@@ -38,6 +38,6 @@ jobs:
       id: amplify-stack
       uses: aws-actions/aws-cloudformation-github-deploy@v1
       with:
-        name: ${{ steps.env-name.outputs.environment }}
+        name: hello
         template: Untitled-1.yml
         no-fail-on-empty-changeset: "1"
