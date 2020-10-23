@@ -9,6 +9,8 @@
 
 on:
   push:
+    branches:
+      - staging
 
 name: Deploy
 
@@ -31,10 +33,13 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-southeast-2
 
-    - name: Deploy to Amplify Console with CloudFormation
+    # Deploy
+    - name: Deploy to production with CloudFormation
+      if: github.ref == 'refs/heads/staging'
       id: amplify-stack
       uses: aws-actions/aws-cloudformation-github-deploy@v1
       with:
         name: hello
         template: Untitled-1.yml
         no-fail-on-empty-changeset: "1"
+      
